@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvMonthlyIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/monthly_income"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        tools:ignore="ContentDescription,RtlHardcoded" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edMonthlyIncome"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMonthlyIncome"
+        android:layout_alignStart="@+id/tvMonthlyIncome"
+        android:layout_alignLeft="@+id/tvMonthlyIncome"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="23dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/monthly_income"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        tools:ignore="RtlHardcoded" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubmit"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="@dimen/_500sdp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edMonthlyIncome"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="23dp"
+        android:gravity="center"
+        android:text="@string/submit"
+        android:textAlignment="center" />
+
+</RelativeLayout>

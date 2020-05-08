@@ -9,5 +9,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="monthly_income">Monthly income</string>
+    <string name="submit">Submit</string>
+    <string name="add_amount">Add amount</string>
+    <string name="add_remark">Remark</string>
+    <string name="category">Category</string>
+    <string name="report">Report</string>
 
 </resources>

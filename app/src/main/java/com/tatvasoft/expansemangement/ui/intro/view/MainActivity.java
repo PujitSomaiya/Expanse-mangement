@@ -6,6 +6,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
@@ -14,15 +15,20 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 
+import com.google.android.material.button.MaterialButton;
 import com.tatvasoft.expansemangement.R;
 import com.tatvasoft.expansemangement.adapter.DrawerItemCustomAdapter;
 import com.tatvasoft.expansemangement.ui.category.view.CategoryFragment;
 import com.tatvasoft.expansemangement.ui.home.view.HomeFragment;
 import com.tatvasoft.expansemangement.ui.intro.model.DataModel;
 import com.tatvasoft.expansemangement.ui.report.view.ReportFragment;
+import com.tatvasoft.expansemangement.util.CommonUtil;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     ActionBarDrawerToggle mDrawerToggle;
+    private String finalIncome;
+    private Bundle bundleIncome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mTitle = mDrawerTitle = getTitle();
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerList = findViewById(R.id.left_drawer);
 
         setupToolbar();
 
@@ -56,10 +64,35 @@ public class MainActivity extends AppCompatActivity {
         DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setupDrawerToggle();
+        addIncome();
+    }
 
+    private void addIncome() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_income);
+        final MaterialButton btnSubmit = dialog.findViewById(R.id.btnSubmit);
+        final EditText edMonthlyIncome = dialog.findViewById(R.id.edMonthlyIncome);
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (CommonUtil.isEmptyEditText(edMonthlyIncome) && CommonUtil.isNotNull(edMonthlyIncome)) {
+                    edMonthlyIncome.setError("Add income");
+                } else {
+                    finalIncome = edMonthlyIncome.getText().toString();
+                    bundleIncome = new Bundle();
+                    bundleIncome.putString("income", finalIncome);
+                    selectItem(0);
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -78,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
         switch (position) {
             case 0:
                 fragment = new HomeFragment();
+                if (bundleIncome!=null){
+                    fragment.setArguments(bundleIncome);
+                }
                 break;
             case 1:
                 fragment = new CategoryFragment();
@@ -127,9 +163,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setupToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
     }
 
     void setupDrawerToggle() {
