@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     finalIncome = edMonthlyIncome.getText().toString();
                     bundleIncome = new Bundle();
                     bundleIncome.putString("income", finalIncome);
-                    selectItem(0);
+                    selectItem(0,null);
                     dialog.dismiss();
                 }
             }
@@ -99,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            selectItem(position,null);
         }
 
     }
 
-    private void selectItem(int position) {
+    public void selectItem(int position,Bundle bundle) {
 
         Fragment fragment = null;
 
@@ -117,9 +117,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 1:
                 fragment = new CategoryFragment();
+                if (bundle!=null){
+                    fragment.setArguments(bundle);
+                }
                 break;
             case 2:
                 fragment = new ReportFragment();
+                if (bundle!=null){
+                    fragment.setArguments(bundle);
+                }
                 break;
 
             default:

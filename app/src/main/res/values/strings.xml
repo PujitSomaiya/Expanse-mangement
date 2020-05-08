@@ -15,5 +15,7 @@
     <string name="add_remark">Remark</string>
     <string name="category">Category</string>
     <string name="report">Report</string>
+    <string name="add">Add</string>
+    <string name="show_list">Show list</string>
 
 </resources>

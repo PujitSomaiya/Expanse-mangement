@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     android:padding="@dimen/_10sdp">
 
+    <!--<include-->
+    <!--android:id="@+id/toolbar"-->
+    <!--layout="@layout/toolbar" />-->
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvIncome"
         android:layout_width="@dimen/dp_0"
@@ -13,16 +17,17 @@
         android:text="@string/add_amount"
         android:textColor="@android:color/black"
         android:textSize="@dimen/_20ssp"
-        app:layout_constraintEnd_toStartOf="@id/edIncome"
+        app:layout_constraintEnd_toStartOf="@id/edSpend"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edIncome"
+        android:id="@+id/edSpend"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:hint="@string/add_amount"
+        android:inputType="numberDecimal"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintBottom_toBottomOf="@+id/tvIncome"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +51,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:hint="@string/add_remark"
+        android:inputType="textCapCharacters"
         android:textSize="@dimen/_15ssp"
         app:layout_constraintBottom_toBottomOf="@+id/tvRemark"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,29 +68,97 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvRemark" />
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spnCategory"
+    <RelativeLayout
+        android:id="@+id/rvSpn"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/tvCategory"
-        app:layout_constraintTop_toTopOf="@id/tvCategory"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="@dimen/_55sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/spinner_background"
+        android:padding="@dimen/_2sdp"
+        android:paddingBottom="@dimen/_15sdp"
         app:layout_constraintBottom_toBottomOf="@id/tvCategory"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvCategory"
+        app:layout_constraintTop_toTopOf="@id/tvCategory">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spnCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown" />
+    </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAdd"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:text="@string/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvSpn"
+        app:layout_constraintVertical_bias="0" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvCategoryView"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Category"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_20ssp"
+        app:layout_constraintEnd_toStartOf="@id/tvSpendView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAdd" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSpendView"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Spend"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_20ssp"
+        app:layout_constraintEnd_toStartOf="@id/tvRemarkView"
+        app:layout_constraintStart_toEndOf="@id/tvCategoryView"
+        app:layout_constraintTop_toBottomOf="@id/btnAdd" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvRemarkView"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Remark"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_20ssp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvSpendView"
+        app:layout_constraintTop_toBottomOf="@id/btnAdd" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDetails"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSpendView" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReport"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:text="@string/report"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCategory"
+        android:text="Report"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvDetails"
+        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
