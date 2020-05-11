@@ -21,6 +21,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.tatvasoft.expansemangement.R;
 import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
 import com.tatvasoft.expansemangement.ui.category.view.DetailsAdapter;
+import com.tatvasoft.expansemangement.ui.intro.model.DetailsDataBase;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,7 @@ public class ReportFragment extends Fragment {
     private View rootView;
     private LinearLayoutManager linearLayoutManager;
     private int foodMoney,petrolMoney,stationaryMoney;
+    private DetailsDataBase detailsDataBase;
 
     public ReportFragment() {
     }
@@ -51,7 +53,23 @@ public class ReportFragment extends Fragment {
     private void initControls() {
         initListeners();
         getDetails();
+        getDataBaseData();
 
+    }
+
+    private void getDataBaseData() {
+        details=detailsDataBase.listData();
+        if (details != null) {
+            if (details.size()==0){
+                Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
+            }else {
+                getEntries();
+                setDataInChart();
+                setRecyclerAdapter();
+            }
+        } else {
+            Toast.makeText(getActivity(), "No details in database ", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setRecyclerAdapter() {
@@ -72,24 +90,25 @@ public class ReportFragment extends Fragment {
     }
 
     private void getDetails() {
-        if (getArguments() != null) {
-            details = (ArrayList<DetailsModel>) getArguments().getSerializable("details");
-            if (details.size()==0){
-                Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
-            }else {
-                getEntries();
-                setDataInChart();
-                setRecyclerAdapter();
-            }
-        } else {
-            Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
-        }
+//        if (getArguments() != null) {
+//            details = (ArrayList<DetailsModel>) getArguments().getSerializable("details");
+//            if (details.size()==0){
+//                Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
+//            }else {
+//                getEntries();
+//                setDataInChart();
+//                setRecyclerAdapter();
+//            }
+//        } else {
+//            Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @SuppressLint("WrongConstant")
     private void initListeners() {
         pieChart = rootView.findViewById(R.id.pieChart);
         rvDetails = rootView.findViewById(R.id.rvDetails);
+        detailsDataBase=new DetailsDataBase(getContext());
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvDetails.setLayoutManager(linearLayoutManager);
     }
@@ -100,20 +119,23 @@ public class ReportFragment extends Fragment {
         for (int i = 0; i < details.size(); i++) {
             detail = details.get(i);
             {
-                if (detail.getCategory().equals("Food")){
-                    foodMoney=Integer.valueOf(detail.getMoneySpend().toString())+foodMoney;
-                    pieEntryLabels.add(detail.getCategory());
-                }else if (detail.getCategory().equals("Petrol")){
-                    petrolMoney=Integer.valueOf(detail.getMoneySpend().toString())+petrolMoney;
-                    pieEntryLabels.add(detail.getCategory());
-                }else if (detail.getCategory().equals("Stationary")){
-                    stationaryMoney=Integer.valueOf(detail.getMoneySpend().toString())+stationaryMoney;
-                    pieEntryLabels.add(detail.getCategory());
+                switch (detail.getCategory()) {
+                    case "Food":
+                        foodMoney = Integer.parseInt(detail.getMoneySpend()) + foodMoney;
+                        pieEntryLabels.add(detail.getCategory());
+                        break;
+                    case "Petrol":
+                        petrolMoney = Integer.parseInt(detail.getMoneySpend()) + petrolMoney;
+                        pieEntryLabels.add(detail.getCategory());
+                        break;
+                    case "Stationary":
+                        stationaryMoney = Integer.parseInt(detail.getMoneySpend()) + stationaryMoney;
+                        pieEntryLabels.add(detail.getCategory());
+                        break;
                 }
 
             }
         }
-
         if (foodMoney>0){
             pieEntries.add(new Entry(foodMoney, 0));
         }

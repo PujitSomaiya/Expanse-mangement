@@ -45,8 +45,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private DetailsModel detailModel;
     private DetailsDataBase detailsDataBase;
     private SharedPreferences incomePreference;
-    public static final String MyPREFERENCES = "incomePref";
-    public static final String Income = "incomeKey";
+    private DetailsAdapter detailsAdapter;
+    private static final String MyPREFERENCES = "incomePref";
+    private static final String Income = "incomeKey";
 
     public HomeFragment() {
     }
@@ -141,6 +142,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             incomeEditor.apply();
             income = Integer.parseInt(edIncome.getText().toString());
             spendMoney = income;
+            detailsModels.clear();
+            detailsAdapter = new DetailsAdapter(getContext(), detailsModels);
+            rvDetails.setAdapter(detailsAdapter);
             Toast.makeText(getActivity(), "Income changed,Your current income is :"+income, Toast.LENGTH_LONG).show();
             edIncome.setText("");
             edSpend.requestFocus();
@@ -151,7 +155,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         Bundle bundle = new Bundle();
         bundle.putSerializable("details", detailsModels);
         if (detailsModels != null) {
-            ((MainActivity) getActivity()).selectItem(2, bundle);
+            ((MainActivity) getActivity()).selectItem(2, null);
             CommonUtil.hideKeyboard(getActivity());
         } else {
             Toast.makeText(getActivity(), "Add details", Toast.LENGTH_LONG).show();
@@ -177,8 +181,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     edSpend.requestFocus();
                     edRemark.setText("");
                     edSpend.setText("");
-                    DetailsAdapter transactionAdapter = new DetailsAdapter(getContext(), detailsModels);
-                    rvDetails.setAdapter(transactionAdapter);
+                    detailsAdapter = new DetailsAdapter(getContext(), detailsModels);
+                    rvDetails.setAdapter(detailsAdapter);
                 }
             } else {
                 Toast.makeText(getActivity(), "Enough money spend,Remaining income is :" + income, Toast.LENGTH_LONG).show();

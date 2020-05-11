@@ -51,7 +51,7 @@ public class DetailsDataBase extends SQLiteOpenHelper {
                 String spend = cursor.getString(cursor.getColumnIndex(COLUMN_SPEND));
                 String remark = cursor.getString(cursor.getColumnIndex(COLUMN_REMARK));
                 String date = cursor.getString(cursor.getColumnIndex(COLUMN_REMARK));
-                dataModel.add(new DetailsModel(category, spend, remark,date));
+                dataModel.add(new DetailsModel(spend, remark, category,date));
             }
             while (cursor.moveToNext());
         }

@@ -1,24 +1,63 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-    xmlns:app = "http://schemas.android.com/apk/res-auto"
-    xmlns:tools = "http://schemas.android.com/tools"
-    android:layout_width = "match_parent"
-    android:layout_height = "match_parent">
-    <com.github.mikephil.charting.charts.PieChart
-        android:id = "@+id/pieChart"
-        android:layout_width = "0dp"
-        android:layout_height = "0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/rvDetails"
-        />
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDetails"
         android:layout_width="@dimen/dp_0"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pieChart"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="@dimen/dp_0"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCategoryView" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_0"
+        app:layout_constraintBottom_toTopOf="@+id/tvCategoryView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSpendView"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Spend"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toTopOf="@id/rvDetails"
+        app:layout_constraintEnd_toStartOf="@id/tvRemarkView"
+        app:layout_constraintStart_toEndOf="@id/tvCategoryView"
+        app:layout_constraintTop_toBottomOf="@id/pieChart" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvRemarkView"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Remark"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toTopOf="@id/rvDetails"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvSpendView"
+        app:layout_constraintTop_toBottomOf="@id/pieChart" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvCategoryView"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Category"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toTopOf="@id/rvDetails"
+        app:layout_constraintEnd_toStartOf="@id/tvSpendView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pieChart" />
 </androidx.constraintlayout.widget.ConstraintLayout>
