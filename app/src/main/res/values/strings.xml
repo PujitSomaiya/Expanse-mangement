@@ -18,5 +18,6 @@
     <string name="add">Add</string>
     <string name="show_list">Show list</string>
     <string name="change_income">change income</string>
+    <string name="select_date">Select Date</string>
 
 </resources>

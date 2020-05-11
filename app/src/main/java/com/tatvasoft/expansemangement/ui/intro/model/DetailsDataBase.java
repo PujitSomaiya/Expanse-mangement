@@ -46,7 +46,6 @@ public class DetailsDataBase extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
                 String category = cursor.getString(cursor.getColumnIndex(COLUMN_CATEGORY));
                 String spend = cursor.getString(cursor.getColumnIndex(COLUMN_SPEND));
                 String remark = cursor.getString(cursor.getColumnIndex(COLUMN_REMARK));
@@ -60,6 +59,32 @@ public class DetailsDataBase extends SQLiteOpenHelper {
         return dataModel;
     }
 
+    public ArrayList<DetailsModel> selectedDate(String selectedDate) {
+
+        String sqll=  "SELECT * FROM " + TABLE_POST + " where " +
+                COLUMN_DATE + " = " + selectedDate;;
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<DetailsModel> dataModel = new ArrayList<>();
+        Cursor cursor = db.rawQuery(sqll, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String category = cursor.getString(cursor.getColumnIndex(COLUMN_CATEGORY));
+                String spend = cursor.getString(cursor.getColumnIndex(COLUMN_SPEND));
+                String remark = cursor.getString(cursor.getColumnIndex(COLUMN_REMARK));
+                String date = cursor.getString(cursor.getColumnIndex(COLUMN_REMARK));
+                dataModel.add(new DetailsModel(spend, remark, category,date));
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return dataModel;
+    }
+    public void deleteBlog(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_POST, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
     public void addDetails(DetailsModel dataModel) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_CATEGORY, dataModel.getCategory());
@@ -68,12 +93,5 @@ public class DetailsDataBase extends SQLiteOpenHelper {
         contentValues.put(COLUMN_DATE, dataModel.getDate());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_POST, null, contentValues);
-    }
-
-
-    public void deleteBlog(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_POST, COLUMN_ID + "=?", new String[]{String.valueOf(id)});
-        db.close();
     }
 }

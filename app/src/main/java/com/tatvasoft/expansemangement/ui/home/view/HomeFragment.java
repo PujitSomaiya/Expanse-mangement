@@ -1,6 +1,7 @@
 package com.tatvasoft.expansemangement.ui.home.view;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -28,11 +30,12 @@ import com.tatvasoft.expansemangement.ui.intro.view.MainActivity;
 import com.tatvasoft.expansemangement.util.CommonUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.tatvasoft.expansemangement.ui.intro.view.MainActivity.MyPREFERENCES;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    private EditText edSpend, edRemark, edIncome;
+    private EditText edSpend, edRemark, edIncome, edDate;
     private Spinner spnCategory;
     private MaterialButton btnAdd, btnChangIncome, btnReport;
     private View rootView;
@@ -48,6 +51,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private DetailsAdapter detailsAdapter;
     private static final String MyPREFERENCES = "incomePref";
     private static final String Income = "incomeKey";
+    private DatePickerDialog datePickerDialog;
+    private Calendar calendar;
+    private int mYear, mMonth, mDay;
+    private String fDate;
 
     public HomeFragment() {
     }
@@ -91,10 +98,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void initListeners() {
         edSpend = rootView.findViewById(R.id.edSpend);
         edRemark = rootView.findViewById(R.id.edRemark);
         edIncome = rootView.findViewById(R.id.edIncome);
+        edDate = rootView.findViewById(R.id.edDate);
         spnCategory = rootView.findViewById(R.id.spnCategory);
         btnAdd = rootView.findViewById(R.id.btnAdd);
         btnReport = rootView.findViewById(R.id.btnReport);
@@ -107,8 +116,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btnAdd.setOnClickListener(this);
         btnReport.setOnClickListener(this);
         btnChangIncome.setOnClickListener(this);
+        edDate.setOnClickListener(this);
         detailsDataBase = new DetailsDataBase(getActivity());
         incomePreference = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR); // current year
+        mMonth = calendar.get(Calendar.MONTH); // current month
+        mDay = calendar.get(Calendar.DAY_OF_MONTH); // current day
+        edDate.setText(mDay + "/"
+                + (mMonth + 1) + "/" + mYear);
+        fDate=String.valueOf(mDay+(mMonth + 1)+mYear);
 
     }
 
@@ -130,7 +147,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             showReport();
         } else if (id == R.id.btnChangIncome) {
             changeIncome();
+        } else if (id == R.id.edDate) {
+            dateChange();
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void dateChange() {
+        datePickerDialog = new DatePickerDialog(getContext(),
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    edDate.setText(dayOfMonth + "/"
+                            + (monthOfYear + 1) + "/" + year);
+                    fDate=String.valueOf(dayOfMonth+(monthOfYear + 1)+year);
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
     }
 
     private void changeIncome() {
@@ -145,7 +175,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             detailsModels.clear();
             detailsAdapter = new DetailsAdapter(getContext(), detailsModels);
             rvDetails.setAdapter(detailsAdapter);
-            Toast.makeText(getActivity(), "Income changed,Your current income is :"+income, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Income changed,Your current income is :" + income, Toast.LENGTH_LONG).show();
             edIncome.setText("");
             edSpend.requestFocus();
         }
@@ -175,7 +205,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if (Integer.parseInt(edSpend.getText().toString()) <= income) {
                 income = income - Integer.parseInt(edSpend.getText().toString());
                 if (spendMoney >= income) {
-                    detailModel = new DetailsModel(edSpend.getText().toString(), edRemark.getText().toString(), spnCategory.getSelectedItem().toString(), null);
+                    detailModel = new DetailsModel(edSpend.getText().toString(), edRemark.getText().toString(), spnCategory.getSelectedItem().toString(), fDate);
                     detailsModels.add(detailModel);
                     setDetails();
                     edSpend.requestFocus();
