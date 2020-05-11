@@ -20,5 +20,6 @@
     <string name="change_income">change income</string>
     <string name="select_date">Select Date</string>
     <string name="add_category">Add category</string>
+    <string name="daily_income">Daily income</string>
 
 </resources>

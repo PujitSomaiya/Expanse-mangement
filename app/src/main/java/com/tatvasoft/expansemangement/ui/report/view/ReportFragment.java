@@ -40,13 +40,14 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private PieDataSet pieDataSet;
     private View rootView;
     private LinearLayoutManager linearLayoutManager;
-    private int foodMoney, petrolMoney, stationaryMoney;
+    private int money;
     private DetailsDataBase detailsDataBase;
     private Calendar calendar;
     private int mYear, mMonth, mDay;
     private DatePickerDialog datePickerDialog;
     private String fDate;
     private DetailsAdapter detailsAdapter;
+    private ArrayList<String> categories;
 
     public ReportFragment() {
 
@@ -67,9 +68,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getDataBaseData(String fDate) {
-        foodMoney = 0;
-        petrolMoney = 0;
-        stationaryMoney = 0;
+        money = 0;
         pieChart.clear();
         pieEntries = null;
         pieEntries = new ArrayList<>();
@@ -143,36 +142,21 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private void getEntries() {
         pieEntries = new ArrayList<>();
         pieEntryLabels = new ArrayList<>();
+        categories = new ArrayList<>();
         for (int i = 0; i < details.size(); i++) {
             detail = details.get(i);
             {
-                switch (detail.getCategory()) {
-                    case "Food":
-                        foodMoney = Integer.parseInt(detail.getMoneySpend()) + foodMoney;
-                        pieEntryLabels.add(detail.getCategory());
-                        break;
-                    case "Petrol":
-                        petrolMoney = Integer.parseInt(detail.getMoneySpend()) + petrolMoney;
-                        pieEntryLabels.add(detail.getCategory());
-                        break;
-                    case "Stationary":
-                        stationaryMoney = Integer.parseInt(detail.getMoneySpend()) + stationaryMoney;
-                        pieEntryLabels.add(detail.getCategory());
-                        break;
-                }
-
+                String category = detail.getCategory();
+                categories.add(category);
             }
         }
-        if (foodMoney > 0) {
-            pieEntries.add(new Entry(foodMoney, 0));
+        for (int i = 0; i < categories.size(); i++) {
+            if (categories.get(i).equals(details.get(i).getCategory())) {
+                money = Integer.parseInt(details.get(i).getMoneySpend());
+                pieEntryLabels.add(details.get(i).getCategory());
+                pieEntries.add(new Entry(money, i));
+            }
         }
-        if (petrolMoney > 0) {
-            pieEntries.add(new Entry(petrolMoney, 1));
-        }
-        if (stationaryMoney > 0) {
-            pieEntries.add(new Entry(stationaryMoney, 2));
-        }
-//        pieEntries.add(new Entry(2f, 2));
     }
 
     @Override

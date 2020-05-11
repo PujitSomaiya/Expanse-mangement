@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private ArrayList<AddCategoryModel> categories;
     private ArrayAdapter<String> categoriesAdapter;
     public String string;
+    private String categorySelected = "";
 
     public HomeFragment() {
     }
@@ -95,6 +96,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (getArguments() != null) {
             income = Integer.valueOf(getArguments().getString("income"));
             spendMoney = income;
+            detailsAdapter = new DetailsAdapter(getContext(), detailsDataBase.listData());
+            rvDetails.setAdapter(detailsAdapter);
         } else {
             Toast.makeText(getActivity(), "No initialize income", Toast.LENGTH_SHORT).show();
         }
@@ -128,22 +131,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mDay = calendar.get(Calendar.DAY_OF_MONTH); // current day
         edDate.setText(mDay + "/"
                 + (mMonth + 1) + "/" + mYear);
-        fDate=String.valueOf(mDay+(mMonth + 1)+mYear);
+        fDate = String.valueOf(mDay + (mMonth + 1) + mYear);
 
     }
 
     private void spinner() {
-        categories=categoryDataBase.listData();
+        categories = categoryDataBase.listData();
         ArrayList<String> category = new ArrayList<>();
-        for (int i=0;i<categories.size();i++){
-            string=categories.get(i).category;
+        for (int i = 0; i < categories.size(); i++) {
+            string = categories.get(i).category;
             category.add(string);
         }
 
 
-        if (categories.size()==0){
-            Toast.makeText(getContext(),"set categories",Toast.LENGTH_LONG).show();
-        }else {
+        if (categories.size() == 0) {
+            Toast.makeText(getContext(), "set categories", Toast.LENGTH_LONG).show();
+        } else {
             categoriesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, category);
             categoriesAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spnCategory.setAdapter(categoriesAdapter);
@@ -173,7 +176,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 (view, year, monthOfYear, dayOfMonth) -> {
                     edDate.setText(dayOfMonth + "/"
                             + (monthOfYear + 1) + "/" + year);
-                    fDate=String.valueOf(dayOfMonth+(monthOfYear + 1)+year);
+                    fDate = String.valueOf(dayOfMonth + (monthOfYear + 1) + year);
+                    detailsAdapter = new DetailsAdapter(getContext(), detailsDataBase.selectedDate(fDate));
+                    rvDetails.setAdapter(detailsAdapter);
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
@@ -216,20 +221,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             edRemark.setError("Add remark");
         } else if (CommonUtil.isEmptyEditText(edSpend) && CommonUtil.isNotNull(edSpend)) {
             edSpend.setError("Add amount");
-        }else if (spnCategory.getSelectedItem()==null) {
-            Toast.makeText(getContext(),"set categories",Toast.LENGTH_LONG).show();
-        }else {
+        } else if (spnCategory.getSelectedItem() == null) {
+            Toast.makeText(getContext(), "set categories", Toast.LENGTH_LONG).show();
+        } else {
             if (Integer.parseInt(edSpend.getText().toString()) <= income) {
                 income = income - Integer.parseInt(edSpend.getText().toString());
                 if (spendMoney >= income) {
-                    detailModel = new DetailsModel(edSpend.getText().toString(), edRemark.getText().toString(), spnCategory.getSelectedItem().toString(), fDate);
-                    detailsModels.add(detailModel);
-                    setDetails();
-                    edSpend.requestFocus();
-                    edRemark.setText("");
-                    edSpend.setText("");
-                    detailsAdapter = new DetailsAdapter(getContext(), detailsModels);
-                    rvDetails.setAdapter(detailsAdapter);
+                    if (categorySelected.equals(spnCategory.getSelectedItem().toString())) {
+                        Toast.makeText(getContext(), spnCategory.getSelectedItem().toString() + " : already added", Toast.LENGTH_LONG).show();
+                    } else {
+                        detailModel = new DetailsModel(edSpend.getText().toString(), edRemark.getText().toString(), spnCategory.getSelectedItem().toString(), fDate);
+                        categorySelected = spnCategory.getSelectedItem().toString();
+                        detailsModels.add(detailModel);
+                        setDetails();
+                        edSpend.requestFocus();
+                        edRemark.setText("");
+                        edSpend.setText("");
+                        detailsAdapter = new DetailsAdapter(getContext(), detailsDataBase.listData());
+                        rvDetails.setAdapter(detailsAdapter);
+                    }
+
                 }
             } else {
                 Toast.makeText(getActivity(), "Enough money spend,Remaining income is :" + income, Toast.LENGTH_LONG).show();
