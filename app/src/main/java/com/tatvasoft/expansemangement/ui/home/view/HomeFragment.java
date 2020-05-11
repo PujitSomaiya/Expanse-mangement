@@ -1,13 +1,14 @@
 package com.tatvasoft.expansemangement.ui.home.view;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,25 +21,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.tatvasoft.expansemangement.R;
-import com.tatvasoft.expansemangement.ui.category.model.DataModel;
+import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
 import com.tatvasoft.expansemangement.ui.category.view.DetailsAdapter;
+import com.tatvasoft.expansemangement.ui.intro.model.DetailsDataBase;
 import com.tatvasoft.expansemangement.ui.intro.view.MainActivity;
 import com.tatvasoft.expansemangement.util.CommonUtil;
 
 import java.util.ArrayList;
 
+import static com.tatvasoft.expansemangement.ui.intro.view.MainActivity.MyPREFERENCES;
+
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    private EditText edSpend, edRemark;
+    private EditText edSpend, edRemark, edIncome;
     private Spinner spnCategory;
-    private MaterialButton btnAdd, btnShowList, btnReport;
+    private MaterialButton btnAdd, btnChangIncome, btnReport;
     private View rootView;
     private int income, spendMoney = 0;
     private LinearLayoutManager linearLayoutManager;
     private Toolbar toolbar;
     private String[] category;
     private RecyclerView rvDetails;
-    private ArrayList<DataModel> detailsModels = new ArrayList<>();
-    private DataModel detailModel;
+    private ArrayList<DetailsModel> detailsModels = new ArrayList<>();
+    private DetailsModel detailModel;
+    private DetailsDataBase detailsDataBase;
+    private SharedPreferences incomePreference;
+    public static final String MyPREFERENCES = "incomePref";
+    public static final String Income = "incomeKey";
 
     public HomeFragment() {
     }
@@ -58,6 +66,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         spinner();
     }
 
+    @SuppressLint("ResourceAsColor")
     private void toolbar() {
         toolbar.getMenu().findItem(R.id.AddCategory).setVisible(true);
         toolbar.setBackgroundColor(R.color.colorAccent);
@@ -84,9 +93,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void initListeners() {
         edSpend = rootView.findViewById(R.id.edSpend);
         edRemark = rootView.findViewById(R.id.edRemark);
+        edIncome = rootView.findViewById(R.id.edIncome);
         spnCategory = rootView.findViewById(R.id.spnCategory);
         btnAdd = rootView.findViewById(R.id.btnAdd);
         btnReport = rootView.findViewById(R.id.btnReport);
+        btnChangIncome = rootView.findViewById(R.id.btnChangIncome);
         toolbar = rootView.findViewById(R.id.toolbar);
 //        toolbar.inflateMenu(R.menu.menu_add_category);
         rvDetails = rootView.findViewById(R.id.rvDetails);
@@ -94,6 +105,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rvDetails.setLayoutManager(linearLayoutManager);
         btnAdd.setOnClickListener(this);
         btnReport.setOnClickListener(this);
+        btnChangIncome.setOnClickListener(this);
+        detailsDataBase = new DetailsDataBase(getActivity());
+        incomePreference = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
     }
 
     private void spinner() {
@@ -112,13 +127,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             addOnList();
         } else if (id == R.id.btnReport) {
             showReport();
+        } else if (id == R.id.btnChangIncome) {
+            changeIncome();
+        }
+    }
+
+    private void changeIncome() {
+        if (CommonUtil.isEmptyEditText(edIncome) && CommonUtil.isNotNull(edIncome)) {
+            edIncome.setError("Add income");
+        } else {
+            SharedPreferences.Editor incomeEditor = incomePreference.edit();
+            incomeEditor.putString(Income, edIncome.getText().toString());
+            incomeEditor.apply();
+            income = Integer.parseInt(edIncome.getText().toString());
+            spendMoney = income;
+            Toast.makeText(getActivity(), "Income changed,Your current income is :"+income, Toast.LENGTH_LONG).show();
+            edIncome.setText("");
+            edSpend.requestFocus();
         }
     }
 
     private void showReport() {
         Bundle bundle = new Bundle();
         bundle.putSerializable("details", detailsModels);
-        if (bundle != null) {
+        if (detailsModels != null) {
             ((MainActivity) getActivity()).selectItem(2, bundle);
             CommonUtil.hideKeyboard(getActivity());
         } else {
@@ -126,17 +158,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void setDetails() {
+        detailsDataBase.addDetails(detailModel);
+    }
+
     private void addOnList() {
-        if (CommonUtil.isNotNull(edRemark)&&CommonUtil.isEmptyEditText(edRemark)){
+        if (CommonUtil.isNotNull(edRemark) && CommonUtil.isEmptyEditText(edRemark)) {
             edRemark.setError("Add remark");
-        }else if (CommonUtil.isEmptyEditText(edSpend)&&CommonUtil.isNotNull(edSpend)){
+        } else if (CommonUtil.isEmptyEditText(edSpend) && CommonUtil.isNotNull(edSpend)) {
             edSpend.setError("Add amount");
-        }else {
-            if (Integer.valueOf(edSpend.getText().toString()) <= income) {
-                income = income - Integer.valueOf(edSpend.getText().toString());
+        } else {
+            if (Integer.parseInt(edSpend.getText().toString()) <= income) {
+                income = income - Integer.parseInt(edSpend.getText().toString());
                 if (spendMoney >= income) {
-                    detailModel = new DataModel(edSpend.getText().toString(), edRemark.getText().toString(), spnCategory.getSelectedItem().toString());
+                    detailModel = new DetailsModel(edSpend.getText().toString(), edRemark.getText().toString(), spnCategory.getSelectedItem().toString(), null);
                     detailsModels.add(detailModel);
+                    setDetails();
                     edSpend.requestFocus();
                     edRemark.setText("");
                     edSpend.setText("");
@@ -144,10 +181,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     rvDetails.setAdapter(transactionAdapter);
                 }
             } else {
-                Toast.makeText(getActivity(), "Enough money spend", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Enough money spend,Remaining income is :" + income, Toast.LENGTH_LONG).show();
             }
         }
-
 
 
     }

@@ -19,15 +19,15 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.tatvasoft.expansemangement.R;
-import com.tatvasoft.expansemangement.ui.category.model.DataModel;
+import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
 import com.tatvasoft.expansemangement.ui.category.view.DetailsAdapter;
 
 import java.util.ArrayList;
 
 public class ReportFragment extends Fragment {
-    private ArrayList<DataModel> details;
+    private ArrayList<DetailsModel> details;
     private RecyclerView rvDetails;
-    private DataModel detail;
+    private DetailsModel detail;
     private ArrayList pieEntries;
     private ArrayList<String>  pieEntryLabels;
     private PieChart pieChart;
@@ -73,7 +73,7 @@ public class ReportFragment extends Fragment {
 
     private void getDetails() {
         if (getArguments() != null) {
-            details = (ArrayList<DataModel>) getArguments().getSerializable("details");
+            details = (ArrayList<DetailsModel>) getArguments().getSerializable("details");
             if (details.size()==0){
                 Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
             }else {

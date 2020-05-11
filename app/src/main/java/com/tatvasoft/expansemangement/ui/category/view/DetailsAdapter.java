@@ -1,37 +1,25 @@
 package com.tatvasoft.expansemangement.ui.category.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tatvasoft.expansemangement.R;
-import com.tatvasoft.expansemangement.ui.category.model.DataModel;
+import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
 
 import java.util.ArrayList;
 
 public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsViewHolder> {
 
     private final Context context;
-    private final ArrayList<DataModel> dataList;
-    private DataModel details;
+    private final ArrayList<DetailsModel> dataList;
+    private DetailsModel details;
     private boolean isGridView = false;
     private int positionOfData;
     private int title;
@@ -40,7 +28,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
     private Context rootContext;
 
 
-    public DetailsAdapter(Context context, ArrayList<DataModel> dataList) {
+    public DetailsAdapter(Context context, ArrayList<DetailsModel> dataList) {
         this.context = context;
         this.dataList = dataList;
         rootContext = context;

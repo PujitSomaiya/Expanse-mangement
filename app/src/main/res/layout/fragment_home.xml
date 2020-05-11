@@ -10,64 +10,6 @@
     <!--android:id="@+id/toolbar"-->
     <!--layout="@layout/toolbar" />-->
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvIncome"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:text="@string/add_amount"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/_20ssp"
-        app:layout_constraintEnd_toStartOf="@id/edSpend"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edSpend"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:hint="@string/add_amount"
-        android:inputType="numberDecimal"
-        android:textSize="@dimen/_15ssp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvIncome"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvIncome"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvRemark"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:text="@string/add_remark"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/_20ssp"
-        app:layout_constraintEnd_toStartOf="@id/edRemark"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvIncome" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/edRemark"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:hint="@string/add_remark"
-        android:inputType="textCapCharacters"
-        android:textSize="@dimen/_15ssp"
-        app:layout_constraintBottom_toBottomOf="@+id/tvRemark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvRemark"
-        app:layout_constraintTop_toTopOf="@id/tvRemark" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvCategory"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:text="@string/category"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/_20ssp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvRemark" />
-
     <RelativeLayout
         android:id="@+id/rvSpn"
         android:layout_width="@dimen/dp_0"
@@ -89,6 +31,16 @@
             android:spinnerMode="dropdown" />
     </RelativeLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDetails"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSpendView" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAdd"
         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -102,6 +54,112 @@
         app:layout_constraintTop_toBottomOf="@id/rvSpn"
         app:layout_constraintVertical_bias="0" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnReport"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:text="@string/report"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvDetails"
+        app:layout_constraintVertical_bias="0" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnChangIncome"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:text="@string/change_income"
+        android:textSize="@dimen/_5ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIncomeChange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edIncome"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edIncome"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/change_income"
+        android:inputType="numberDecimal"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIncomeChange"
+        app:layout_constraintEnd_toStartOf="@id/btnChangIncome"
+        app:layout_constraintStart_toEndOf="@id/tvIncomeChange"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edSpend"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/add_amount"
+        android:inputType="numberDecimal"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvIncome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvIncome"
+        app:layout_constraintTop_toBottomOf="@id/tvIncomeChange" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edRemark"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:hint="@string/add_remark"
+        android:inputType="textCapCharacters"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvRemark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tvRemark"
+        app:layout_constraintTop_toTopOf="@id/tvRemark" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvIncomeChange"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:text="@string/change_income"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_13ssp"
+        app:layout_constraintEnd_toStartOf="@id/edIncome"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvIncome"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:text="@string/add_amount"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toStartOf="@id/edSpend"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvIncomeChange" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvRemark"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:text="@string/add_remark"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintEnd_toStartOf="@id/edRemark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvIncome" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvCategory"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:text="@string/category"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_15ssp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRemark" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvCategoryView"
         android:layout_width="@dimen/dp_0"
@@ -109,7 +167,7 @@
         android:gravity="center"
         android:text="Category"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/_20ssp"
+        android:textSize="@dimen/_15ssp"
         app:layout_constraintEnd_toStartOf="@id/tvSpendView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnAdd" />
@@ -121,7 +179,7 @@
         android:gravity="center"
         android:text="Spend"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/_20ssp"
+        android:textSize="@dimen/_15ssp"
         app:layout_constraintEnd_toStartOf="@id/tvRemarkView"
         app:layout_constraintStart_toEndOf="@id/tvCategoryView"
         app:layout_constraintTop_toBottomOf="@id/btnAdd" />
@@ -133,32 +191,10 @@
         android:gravity="center"
         android:text="Remark"
         android:textColor="@android:color/black"
-        android:textSize="@dimen/_20ssp"
+        android:textSize="@dimen/_15ssp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvSpendView"
         app:layout_constraintTop_toBottomOf="@id/btnAdd" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDetails"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSpendView" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnReport"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:text="Report"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rvDetails"
-        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
