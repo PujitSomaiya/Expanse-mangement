@@ -1,4 +1,4 @@
-package com.tatvasoft.expansemangement.ui.category.view;
+package com.tatvasoft.expansemangement.ui.home.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tatvasoft.expansemangement.R;
-import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
+import com.tatvasoft.expansemangement.ui.intro.model.DetailsModel;
 
 import java.util.ArrayList;
 
@@ -66,7 +66,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.DetailsV
         public DetailsViewHolder(View itemView) {
             super(itemView);
             tvRemark=itemView.findViewById(R.id.tvRemark);
-            tvSpend=itemView.findViewById(R.id.tvSpend);
+            tvSpend=itemView.findViewById(R.id.tvSpendView);
             tvCategory=itemView.findViewById(R.id.tvCategory);
         }
 

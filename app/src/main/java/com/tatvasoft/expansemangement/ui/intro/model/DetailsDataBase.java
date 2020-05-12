@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
-
 import java.util.ArrayList;
 
 public class DetailsDataBase extends SQLiteOpenHelper {
@@ -61,11 +59,11 @@ public class DetailsDataBase extends SQLiteOpenHelper {
 
     public ArrayList<DetailsModel> selectedDate(String selectedDate) {
 
-        String sqll=  "SELECT * FROM " + TABLE_POST + " where " +
-                COLUMN_DATE + " = " + selectedDate;;
+        String sql=  "SELECT * FROM " + TABLE_POST + " where " +
+                COLUMN_DATE + " = " + selectedDate;
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<DetailsModel> dataModel = new ArrayList<>();
-        Cursor cursor = db.rawQuery(sqll, null);
+        Cursor cursor = db.rawQuery(sql, null);
         if (cursor.moveToFirst()) {
             do {
                 String category = cursor.getString(cursor.getColumnIndex(COLUMN_CATEGORY));

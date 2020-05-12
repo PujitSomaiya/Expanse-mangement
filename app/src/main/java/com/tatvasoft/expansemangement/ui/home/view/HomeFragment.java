@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,16 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.tatvasoft.expansemangement.R;
-import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
-import com.tatvasoft.expansemangement.ui.category.view.DetailsAdapter;
+import com.tatvasoft.expansemangement.ui.category.model.AddCategoryModel;
+import com.tatvasoft.expansemangement.ui.intro.model.CategoryDataBase;
+import com.tatvasoft.expansemangement.ui.intro.model.DetailsModel;
 import com.tatvasoft.expansemangement.ui.intro.model.DetailsDataBase;
 import com.tatvasoft.expansemangement.ui.intro.view.MainActivity;
 import com.tatvasoft.expansemangement.util.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import static com.tatvasoft.expansemangement.ui.intro.view.MainActivity.MyPREFERENCES;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private EditText edSpend, edRemark, edIncome, edDate;
@@ -42,8 +40,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private int income, spendMoney = 0;
     private LinearLayoutManager linearLayoutManager;
     private Toolbar toolbar;
-    private String[] category;
+    private AddCategoryModel category;
     private RecyclerView rvDetails;
+    private CategoryDataBase categoryDataBase;
     private ArrayList<DetailsModel> detailsModels = new ArrayList<>();
     private DetailsModel detailModel;
     private DetailsDataBase detailsDataBase;
@@ -55,6 +54,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private Calendar calendar;
     private int mYear, mMonth, mDay;
     private String fDate;
+    private ArrayList<AddCategoryModel> categories;
+    private ArrayAdapter<String> categoriesAdapter;
+    public String string;
 
     public HomeFragment() {
     }
@@ -118,6 +120,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btnChangIncome.setOnClickListener(this);
         edDate.setOnClickListener(this);
         detailsDataBase = new DetailsDataBase(getActivity());
+        categoryDataBase = new CategoryDataBase(getActivity());
         incomePreference = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR); // current year
@@ -130,17 +133,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void spinner() {
-        category = new String[]{"Food", "Petrol", "Stationary"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, category);
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spnCategory.setAdapter(adapter);
+        categories=categoryDataBase.listData();
+        ArrayList<String> category = new ArrayList<>();
+        for (int i=0;i<categories.size();i++){
+            string=categories.get(i).category;
+            category.add(string);
+        }
+
+
+        if (categories.size()==0){
+            Toast.makeText(getContext(),"set categories",Toast.LENGTH_LONG).show();
+        }else {
+            categoriesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, category);
+            categoriesAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+            spnCategory.setAdapter(categoriesAdapter);
+        }
+
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.spnCategory) {
-            spinnerString();
+
         } else if (id == R.id.btnAdd) {
             addOnList();
         } else if (id == R.id.btnReport) {
@@ -201,7 +216,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             edRemark.setError("Add remark");
         } else if (CommonUtil.isEmptyEditText(edSpend) && CommonUtil.isNotNull(edSpend)) {
             edSpend.setError("Add amount");
-        } else {
+        }else if (spnCategory.getSelectedItem()==null) {
+            Toast.makeText(getContext(),"set categories",Toast.LENGTH_LONG).show();
+        }else {
             if (Integer.parseInt(edSpend.getText().toString()) <= income) {
                 income = income - Integer.parseInt(edSpend.getText().toString());
                 if (spendMoney >= income) {
@@ -222,9 +239,4 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void spinnerString() {
-        if (category.length < 0) {
-            Toast.makeText(getActivity(), "Add categories", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

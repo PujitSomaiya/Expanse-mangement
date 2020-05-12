@@ -20,10 +20,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.material.textview.MaterialTextView;
 import com.tatvasoft.expansemangement.R;
-import com.tatvasoft.expansemangement.ui.category.model.DetailsModel;
-import com.tatvasoft.expansemangement.ui.category.view.DetailsAdapter;
+import com.tatvasoft.expansemangement.ui.intro.model.DetailsModel;
+import com.tatvasoft.expansemangement.ui.home.view.DetailsAdapter;
 import com.tatvasoft.expansemangement.ui.intro.model.DetailsDataBase;
 
 import java.util.ArrayList;
@@ -35,13 +34,13 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private DetailsModel detail;
     private ArrayList pieEntries;
     private EditText edDate;
-    private ArrayList<String>  pieEntryLabels;
+    private ArrayList<String> pieEntryLabels;
     private PieChart pieChart;
     private PieData pieData;
     private PieDataSet pieDataSet;
     private View rootView;
     private LinearLayoutManager linearLayoutManager;
-    private int foodMoney,petrolMoney,stationaryMoney;
+    private int foodMoney, petrolMoney, stationaryMoney;
     private DetailsDataBase detailsDataBase;
     private Calendar calendar;
     private int mYear, mMonth, mDay;
@@ -50,6 +49,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     private DetailsAdapter detailsAdapter;
 
     public ReportFragment() {
+
     }
 
     @Override
@@ -67,13 +67,20 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getDataBaseData(String fDate) {
-        details=detailsDataBase.selectedDate(fDate);
+        foodMoney = 0;
+        petrolMoney = 0;
+        stationaryMoney = 0;
+        pieChart.clear();
+        pieEntries = null;
+        pieEntries = new ArrayList<>();
+        pieEntryLabels = new ArrayList<>();
+        details = detailsDataBase.selectedDate(fDate);
         if (details != null) {
-            if (details.size()==0){
+            if (details.size() == 0) {
                 detailsAdapter = new DetailsAdapter(getContext(), details);
                 rvDetails.setAdapter(detailsAdapter);
                 Toast.makeText(getActivity(), "No details ", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
                 getEntries();
                 setDataInChart();
                 setRecyclerAdapter();
@@ -90,9 +97,9 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
 
     private void setDataInChart() {
         pieDataSet = new PieDataSet(pieEntries, "Categories");
-        pieData = new PieData(pieEntryLabels,pieDataSet);
+        pieData = new PieData(pieEntryLabels, pieDataSet);
         pieChart.setData(pieData);
-        pieChart.setUsePercentValues(true);
+//        pieChart.setUsePercentValues(true);
         pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
         pieDataSet.setSliceSpace(2f);
         pieDataSet.setValueTextColor(Color.WHITE);
@@ -121,7 +128,7 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         rvDetails = rootView.findViewById(R.id.rvDetails);
         edDate = rootView.findViewById(R.id.edDate);
         edDate.setOnClickListener(this);
-        detailsDataBase=new DetailsDataBase(getContext());
+        detailsDataBase = new DetailsDataBase(getContext());
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvDetails.setLayoutManager(linearLayoutManager);
         calendar = Calendar.getInstance();
@@ -130,12 +137,12 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         edDate.setText(mDay + "/"
                 + (mMonth + 1) + "/" + mYear);
-        fDate=String.valueOf(mDay+(mMonth + 1)+mYear);
+        fDate = String.valueOf(mDay + (mMonth + 1) + mYear);
     }
 
     private void getEntries() {
         pieEntries = new ArrayList<>();
-        pieEntryLabels= new ArrayList<>();
+        pieEntryLabels = new ArrayList<>();
         for (int i = 0; i < details.size(); i++) {
             detail = details.get(i);
             {
@@ -156,12 +163,13 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
 
             }
         }
-        if (foodMoney>0){
+        if (foodMoney > 0) {
             pieEntries.add(new Entry(foodMoney, 0));
         }
-        if (petrolMoney>0){
+        if (petrolMoney > 0) {
             pieEntries.add(new Entry(petrolMoney, 1));
-        } if (stationaryMoney>0){
+        }
+        if (stationaryMoney > 0) {
             pieEntries.add(new Entry(stationaryMoney, 2));
         }
 //        pieEntries.add(new Entry(2f, 2));
@@ -169,20 +177,22 @@ public class ReportFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        int id=view.getId();
-       if (id == R.id.edDate) {
+        int id = view.getId();
+        if (id == R.id.edDate) {
             dateChange();
         }
     }
+
     @SuppressLint("SetTextI18n")
     private void dateChange() {
         datePickerDialog = new DatePickerDialog(getContext(),
                 (view, year, monthOfYear, dayOfMonth) -> {
                     edDate.setText(dayOfMonth + "/"
                             + (monthOfYear + 1) + "/" + year);
-                    fDate=String.valueOf(dayOfMonth+(monthOfYear + 1)+year);
+                    fDate = String.valueOf(dayOfMonth + (monthOfYear + 1) + year);
                     getDataBaseData(fDate);
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
+
 }

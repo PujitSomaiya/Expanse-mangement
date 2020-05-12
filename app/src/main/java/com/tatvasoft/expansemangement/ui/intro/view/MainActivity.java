@@ -6,14 +6,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,6 +38,7 @@ import com.tatvasoft.expansemangement.util.CommonUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "incomePref";
     public static final String Income = "incomeKey";
     private SharedPreferences incomePreference;
+    private FragmentManager fragmentManager;
+    private  Fragment fragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void selectItem(int position, Bundle bundle) {
 
-        Fragment fragment = null;
-
+       fragment = null;
         switch (position) {
             case 0:
                 fragment = new HomeFragment();
@@ -177,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
             mDrawerList.setItemChecked(position, true);
@@ -192,8 +197,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+
             return true;
         }
 
@@ -219,8 +224,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setupDrawerToggle() {
-        mDrawerToggle = new androidx.appcompat.app.ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
-        //This is necessary to change the icon of the Drawer Toggle upon state change.
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
         mDrawerToggle.syncState();
     }
+
+    
 }

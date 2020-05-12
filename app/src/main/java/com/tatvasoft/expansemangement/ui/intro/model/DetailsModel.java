@@ -1,4 +1,4 @@
-package com.tatvasoft.expansemangement.ui.category.model;
+package com.tatvasoft.expansemangement.ui.intro.model;
 
 import java.io.Serializable;
 

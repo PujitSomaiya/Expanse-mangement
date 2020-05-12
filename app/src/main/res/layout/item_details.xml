@@ -9,12 +9,12 @@
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
         android:gravity="center"
-        app:layout_constraintEnd_toStartOf="@id/tvSpend"
+        app:layout_constraintEnd_toStartOf="@id/tvSpendView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvSpend"
+        android:id="@+id/tvSpendView"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvSpend"
+        app:layout_constraintStart_toEndOf="@id/tvSpendView"
         app:layout_constraintTop_toTopOf="parent" />
 
 
