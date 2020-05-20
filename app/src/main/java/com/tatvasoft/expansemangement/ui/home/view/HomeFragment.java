@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -31,7 +32,6 @@ import com.tatvasoft.expansemangement.util.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private EditText edSpend, edRemark, edIncome, edDate;
     private Spinner spnCategory;
@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
-
+//push to master
     private void changeIncome() {
         if (CommonUtil.isEmptyEditText(edIncome) && CommonUtil.isNotNull(edIncome)) {
             edIncome.setError("Add income");
